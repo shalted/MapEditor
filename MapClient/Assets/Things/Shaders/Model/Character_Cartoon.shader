@@ -1,0 +1,487 @@
+Shader "XianXia/Character/Character_Cartoon"
+{
+    Properties
+    {
+    	[CustomGroup] _BaseSetting("基础设置", Float) = 1.0
+        [CustomTexture(_BaseSetting)][NoScaleOffset] _BaseMap("RGB:颜色  A:内描边", 2D) = "white" {}
+    	[CustomObject(_BaseSetting)] _BaseColor(" ", Color) = (1, 1, 1, 1)
+        [CustomTexture(_BaseSetting)][NoScaleOffset] _NormalMap("法线贴图", 2D) = "bump" {}
+        [CustomObject(_BaseSetting)] _NormalIntensity("法线强度", Range(0, 2)) = 1
+    	
+        
+    	[CustomGroup] _MapSetting("遮罩图设置", Float) = 1.0 
+        [CustomHeader(_MapSetting)] _LightMapTip("R:RampID  G:高光大小  B:硬阴影  A:高光强度", Float) = 1
+        [CustomTexture(_MapSetting)][NoScaleOffset] _LightMap("Light Map", 2D) = "white" {}
+        [CustomObject(_MapSetting)] _InnerOutlineColor("内描边颜色", Color) = (0, 0, 0, 1)
+        [CustomObject(_MapSetting)] _InnerOutlineColorAlbedoWeight("内描边混合固有色权重", Range(0, 1)) = 0.5
+    	[CustomObject(_MapSetting)] _HardShadowColor("硬阴影颜色", Color) = (0, 0, 0, 1)
+        [CustomObject(_MapSetting)] _HardShadowColorAlbedoWeight("硬阴影混合固有色权重", Range(0, 1)) = 0.5
+        
+        [CustomHeader(_MapSetting)] _MaskTip("R:自发光  GBA:空", Float) = 1
+        [CustomTexture(_MapSetting)][NoScaleOffset] _MaskMap("Mask Map", 2D) = "white" {}
+    	
+    	
+    	[CustomGroup] _DiffuseSetting("阴影设置", Float) = 1.0
+        [CustomTexture(_DiffuseSetting)] _RampMap("Ramp图", 2D) = "white" {} 
+        [CustomHeader(_DiffuseSetting)] _RampMapTip("ID通道：Mask_R", Float) = 1 
+        [CustomObject(_DiffuseSetting)] _RampYOffset("ID 偏移", Range(0, 1)) = 0 
+    	
+    	
+    	[CustomGroup] _SpecularSetting("高光设置", Float) = 1.0
+    	[CustomObject(_SpecularSetting)] _SpecularColor ("高光颜色", Color) = (1, 1, 1, 1)
+	    [CustomObject(_SpecularSetting)] _SpecularIntensity ("高光强度", Range(0, 8)) = 1
+        [CustomObject(_SpecularSetting)] _MetaIntensity ("金属高光强度叠加", Range(0, 8)) = 0
+	    [CustomObject(_SpecularSetting)] _SpecularToonSize("高光大小", Range(0, 1)) = 0.1
+        [CustomObject(_SpecularSetting)] _SpecularToonSmoothness("高光边缘柔软度", Range(0.001, 1)) = 0.05
+        [CustomObject(_SpecularSetting)] _SpecularAlbedoWeight("高光混合固有色权重", Range(0, 1)) = 0
+    	
+    	
+    	[CustomGroup] _EmissionSetting("自发光设置", Float) = 1.0
+        [CustomObject(_EmissionSetting)]_EmissionColor("自发光颜色", Color) = (1, 1, 1, 1)
+        [CustomObject(_EmissionSetting)]_EmissionColorBlendAlbedo("自发光混合固有色权重", Range(0, 1)) = 0.5
+        [CustomObject(_EmissionSetting)]_EmissionColorBrightness("自发光亮度", Range(0, 10)) = 0
+    	
+    	
+    	[CustomGroup] _RimSetting("边缘光设置",float) = 1.0
+    	[CustomToggle(_RimSetting, _USERIM)] _useRim("使用边缘光", Float) = 0
+    	[CustomLightDir(_RimSetting._USERIM)] _RimLightDir("边缘光方向",vector) =(0.5, 0.5, 0.5, 1)
+        [CustomObject(_RimSetting._USERIM)][HDR] _RimColor("边缘光颜色", Color) = (1, 1, 0.8245283, 1)
+        [CustomObject(_RimSetting._USERIM)] _RimColorBlend("边缘光混合固有色权重", Range(0, 1)) = 0.5
+        [CustomObject(_RimSetting._USERIM)] _RimThreshold("边缘光范围", Range(0, 1)) = 0.65
+        [CustomObject(_RimSetting._USERIM)] _RimSoftness("边缘光过渡柔软度", Range(0.01, 1)) = 0.244
+    	
+        
+	    [CustomGroup] _OutlineSetting("描边设置", Float) = 1.0
+        [CustomObject(_OutlineSetting)] _OutlineColor("描边颜色", Color) = (0, 0, 0, 1)
+        [CustomObject(_OutlineSetting)] _OutlineWidth("描边宽度", Range(0, 10)) = 1
+    	
+    	
+//		//渲染设置
+//        [HideInInspector] _Surface("_surface", Float) = 0.0
+//        [HideInInspector] _AlphaClip("_alphaclip", Float) = 0.0
+//        [HideInInspector] _Mode("__mode", Float) = 0.0
+//		[HideInInspector] _Cull("__cull", Float) = 2   //[Enum(Cull Off, 0, Cull Front, 1, Cull Back, 2)]
+//        [HideInInspector] _Cutoff("裁剪精度", Range(0.0, 1.0)) = 0.5
+//        [HideInInspector] _SrcBlend("__src", Float) = 1.0
+//        [HideInInspector] _DstBlend("__dst", Float) = 0.0
+//        [HideInInspector] _ZWrite("__zw", Float) = 1.0
+//		[HideInInspector] _ZTest("__zt", Float) = 4.0
+//        [HideInInspector] _QueueOffset("Queue offset", Float) = 0.0
+    }
+    SubShader
+    {
+        Tags
+        {
+            "RenderPipeline" = "UniversalPipeline"
+        }
+        
+        HLSLINCLUDE
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+			TEXTURE2D(_BaseMap); SAMPLER(sampler_BaseMap);
+            TEXTURE2D(_NormalMap); SAMPLER(sampler_NormalMap);
+            TEXTURE2D(_LightMap); SAMPLER(sampler_LightMap);
+            TEXTURE2D(_MaskMap); SAMPLER(sampler_MaskMap);
+            TEXTURE2D(_RampMap); SAMPLER(sampler_RampMap);
+        
+            CBUFFER_START(UnityPerMaterial)
+
+			half4 _BaseColor,//基础设置
+			_InnerOutlineColor, _HardShadowColor, //遮罩图设置
+			_SpecularColor, //高光设置
+			_EmissionColor,//自发光设置
+			_RimLightDir, _RimColor,//边缘光设置
+			_OutlineColor;//描边设置
+
+			float _OutlineWidth;//描边设置
+
+			half
+			_NormalIntensity,//基础设置
+			_InnerOutlineColorAlbedoWeight, _HardShadowColorAlbedoWeight,//遮罩图设置
+			_RampYOffset,//阴影设置
+			_SpecularIntensity, _MetaIntensity, _SpecularToonSize, _SpecularToonSmoothness, _SpecularAlbedoWeight,//高光设置
+			_EmissionColorBlendAlbedo, _EmissionColorBrightness,//自发光设置
+			_useRim, _RimColorBlend, _RimThreshold, _RimSoftness;//边缘光设置
+        
+            CBUFFER_END
+        
+        ENDHLSL
+
+        Pass
+        {
+            Name "Character_Cartoon_Color"
+            Tags
+            {
+            	"RenderType" = "Opaque"
+            	"Queue" = "Geometry"
+                "LightMode" = "UniversalForward"
+            }
+        	
+//        	Blend[_SrcBlend][_DstBlend]
+//            ZWrite [_ZWrite]
+//            ZTest [_ZTest]
+//            Cull[_Cull]
+            
+            HLSLPROGRAM
+            
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma target 3.0
+
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS
+            #pragma multi_compile _ _SHADOWS_SOFT
+
+            #pragma multi_compile_fog
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
+            
+
+            struct a2v
+            {
+                float4 positionOS   : POSITION;
+                float2 uv           : TEXCOORD0;
+                half3 normalOS      : NORMAL;
+                half4 tangentOS     : TANGENT;
+                // half4 color         : COLOR;//RGB:平滑法线  A:描边宽度
+            };
+
+            struct v2f
+            {
+                float4 positionCS                   : SV_POSITION;
+                float2 uv                           : TEXCOORD0;
+                float4 positionWS                   : TEXCOORD1;//w: fogCoord
+                half4 tangentWS                     : TEXCOORD2;//w: viewDirWS.x
+                half4 biTangentWS                   : TEXCOORD3;//w: viewDirWS.y
+                half4 normalWS                      : TEXCOORD4;//w: viewDirWS.z
+                
+                #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+                    float4 shadowCoord              : TEXCOORD5;
+                #endif
+            };
+            
+
+            v2f vert(a2v i)
+            {
+                v2f o = (v2f)0;
+
+                VertexPositionInputs vertexInput = GetVertexPositionInputs(i.positionOS.xyz);
+                o.positionCS = vertexInput.positionCS;
+                o.positionWS.xyz = vertexInput.positionWS;
+                o.positionWS.w = ComputeFogFactor(vertexInput.positionCS.z);
+
+                o.uv.xy = i.uv;
+                o.normalWS.xyz = normalize(mul(i.normalOS, (half3x3)GetWorldToObjectMatrix()));
+                
+
+                half sign = i.tangentOS.w * GetOddNegativeScale();
+                o.tangentWS.xyz = normalize(mul((half3x3)GetObjectToWorldMatrix(), i.tangentOS.xyz));
+                o.biTangentWS.xyz = normalize(cross(o.normalWS.xyz, o.tangentWS.xyz) * sign);
+
+                
+                half3 viewDirWS = GetCameraPositionWS() - vertexInput.positionWS;
+                o.tangentWS.w = viewDirWS.x;
+                o.biTangentWS.w = viewDirWS.y;
+                o.normalWS.w = viewDirWS.z;
+                
+
+                #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+                    o.shadowCoord = GetShadowCoord(vertexInput);
+                #endif
+                
+                return o;
+            }
+
+            half LinearStep(half minValue, half maxValue, half In)
+            {
+                return saturate((In-minValue) / (maxValue - minValue));
+            }
+
+            half4 frag (v2f i) : SV_Target
+            {
+            	//================基础数据计算==================
+                half4 albedoInnerOutline = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv.xy);
+
+                half3 albedo = albedoInnerOutline.xyz * _BaseColor.rgb;
+
+            	
+            	//==============遮罩图==============
+			    half4 lightMap = SAMPLE_TEXTURE2D(_LightMap, sampler_LightMap, i.uv.xy);// R:RampID  G:高光大小  B:硬阴影  A:高光强度
+			    half4 maskMap = SAMPLE_TEXTURE2D(_MaskMap, sampler_MaskMap, i.uv.xy);// R:自发光  GBA:空
+
+            	half innerOutline = albedoInnerOutline.w;
+            	innerOutline = LinearToSRGB(innerOutline);
+
+
+            	half rampID = lightMap.r;
+            	half specularSize = lightMap.g;
+            	half hardShadow = lightMap.b;
+            	half specularIntensity = lightMap.a;
+
+            	// half specularSize = maskMap.a;
+            	half emissionMask = maskMap.r;
+            	
+
+            	
+            	//================法线计算==================
+                half4 normal = SAMPLE_TEXTURE2D(_NormalMap, sampler_NormalMap, i.uv.xy);
+                half3 normalTS = UnpackNormalScale(normal, _NormalIntensity);
+                
+                half3 normalWS = TransformTangentToWorld(normalTS, half3x3(i.tangentWS.xyz, i.biTangentWS.xyz, i.normalWS.xyz));
+                normalWS = normalize(normalWS);
+            	// half3 normalWS = normalize(i.normalWS.xyz);
+
+            	
+            	//================光源数据准备==================
+                float3 positionWS = i.positionWS.xyz;
+                float4 shadowCoord = 0;
+                #if defined(REQUIRES_VERTEX_SHADOW_COORD_INTERPOLATOR)
+                    shadowCoord = i.shadowCoord;
+                #elif defined(MAIN_LIGHT_CALCULATE_SHADOWS)
+                    shadowCoord = TransformWorldToShadowCoord(positionWS);
+                #else
+                    shadowCoord = float4(0, 0, 0, 0);
+                #endif
+            	
+                Light mainLight = GetMainLight(shadowCoord);
+
+
+            	//================向量数据计算==================
+                half3 viewDirWS = normalize(half3(i.tangentWS.w, i.biTangentWS.w, i.normalWS.w));
+                half3 halfDir = normalize(mainLight.direction + viewDirWS);
+
+
+                half NdotL = dot(normalWS, mainLight.direction);
+                half halfLambert = NdotL * 0.5 + 0.5;
+            	NdotL = max(0, NdotL);
+            	half NdotV = max(0, dot(normalWS, viewDirWS));
+                half NdotH = max(0, dot(normalWS, halfDir));
+
+            	
+            	//================阴影计算==================
+            	half radiance = NdotL;
+            	radiance *= mainLight.shadowAttenuation * mainLight.distanceAttenuation;
+
+            	half2 rampUV = half2(radiance, rampID + _RampYOffset);
+			    half3 diffuseColor = SAMPLE_TEXTURE2D(_RampMap, sampler_RampMap, rampUV).rgb;
+
+			    diffuseColor *= albedo;
+            	
+
+            	//================硬阴影计算==================
+            	half3 hardShadowColor = lerp(_HardShadowColor.rgb, _HardShadowColor.rgb * albedo, _HardShadowColorAlbedoWeight);
+				hardShadowColor = lerp(hardShadowColor, 1, hardShadow);
+				
+				radiance *= hardShadow;
+				diffuseColor *= hardShadowColor;
+
+            	
+            	//================高光计算==================
+            	half specularToonSize = specularSize * _SpecularToonSize;
+            	half specSize = 1 - (specularToonSize * specularToonSize * specularToonSize * specularToonSize);
+		        NdotH = (NdotH - specSize * specSize) / (1 - specSize);
+		        half specSmoothness = _SpecularToonSmoothness;
+            	
+		        half specularTerm = LinearStep(0, specSmoothness, NdotH);
+            	specularTerm *= _SpecularIntensity;
+            	specularTerm *= specularIntensity;
+
+            	half3 specularColor = lerp(specularTerm.xxx, albedo * specularTerm, _SpecularAlbedoWeight);
+            	specularColor *= _SpecularColor.rgb;
+            	specularColor *= radiance;
+
+
+            	//================内描边计算==================
+            	half3 innerLineColor = lerp(_InnerOutlineColor.rgb, _InnerOutlineColor.rgb * albedo, _InnerOutlineColorAlbedoWeight);
+				innerLineColor = lerp(innerLineColor, 1, innerOutline);
+            	
+
+            	//================自发光计算==================
+            	half3 emission = emissionMask * lerp(_EmissionColor.rgb, albedo * _EmissionColor.rgb, _EmissionColorBlendAlbedo) * _EmissionColorBrightness;
+
+
+
+            	//================边缘光计算==================
+            	half rimHalfLambert = dot(-_RimLightDir.xyz, normalWS) * 0.5 + 0.5;
+                half RimTerm  = smoothstep(_RimThreshold, _RimThreshold + _RimSoftness, 1 - NdotV);
+			    half rimMask = smoothstep(_RimThreshold, _RimThreshold + _RimSoftness, 1 - rimHalfLambert);
+			    RimTerm *= rimMask;
+
+			    half3 rimColor = _RimColor.rgb * RimTerm;
+			    rimColor *= lerp(half3(1, 1, 1), albedo.rgb, _RimColorBlend) * _useRim;
+            	
+
+                half3 finalColor = diffuseColor + specularColor;
+            	finalColor *= mainLight.color.rgb;
+            	finalColor *= innerLineColor;
+            	finalColor += emission;
+            	finalColor += rimColor;
+
+            	finalColor = MixFog(finalColor, i.positionWS.w);
+
+            	
+                
+                return half4(finalColor, 1);
+            }
+            ENDHLSL
+        }
+        
+        Pass
+		{
+			Name "Character_Cartoon_Outline"
+			Tags { "LightMode"="Outline"}
+			
+			Cull Front
+			HLSLPROGRAM
+
+			#pragma vertex vert
+			#pragma fragment frag
+
+			#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
+			struct VertexInput
+			{
+				float4 vertex : POSITION;
+				float3 normalOS : NORMAL;
+            	float4 tangentOS : TANGENT;
+            	float4 color : COLOR;
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+			};
+
+			struct v2f
+			{
+				float4 positionCS : SV_POSITION;
+				
+				UNITY_VERTEX_INPUT_INSTANCE_ID
+				UNITY_VERTEX_OUTPUT_STEREO
+			};
+
+			float3 TransformObjectToView(float3 positionOS)
+            {
+                return mul(GetWorldToViewMatrix(), 
+                           float4(mul(GetObjectToWorldMatrix(), float4(positionOS, 1.0)).xyz, 1.0)).xyz;
+            }
+			
+			v2f vert ( VertexInput v )
+			{
+				v2f o;
+				
+				//平滑法线转模型空间
+				float3 normalOS = v.normalOS;
+			    float4 tangentOSOS = v.tangentOS;
+			    float3 binormal = cross(normalize(normalOS), 
+			                            normalize(tangentOSOS.xyz)) * tangentOSOS.w;
+
+			    float3x3 objectToTangentMatrix = float3x3(tangentOSOS.xyz, binormal, normalOS);
+				float3 smoothNormal = normalize(mul(v.color.rgb * 2 - 1, objectToTangentMatrix));
+				
+				//将法线转到观察空间
+                float3 normal = mul((float3x3)UNITY_MATRIX_IT_MV, smoothNormal);
+                normal.z = 0.001f;
+                normal = normalize(normal); 
+                //将顶点转到观察空间
+                float3 positionVS = TransformObjectToView(v.vertex.xyz);
+
+
+                ///https://zhuanlan.zhihu.com/p/98948117?utm_source=qq
+                ///增加了一个linewidth的操作，因为unity_CameraProjection[1].y其实就是cos（FOV/2），所以这个操作的根本目的是为了保证轮廓线随着FOV的变换也是成一定比例，同时也不会随着镜头离物体的远近距离而变化。
+                // y = cos（fov/2）
+				float linewidth = -positionVS.z / (unity_CameraProjection[1].y);
+                linewidth = sqrt(linewidth);
+                linewidth *= 0.01;
+                linewidth *= _OutlineWidth;
+				linewidth *= v.color.w;
+
+                positionVS.xy = normal.xy * linewidth + positionVS.xy;
+				
+                o.positionCS = TransformWViewToHClip(positionVS);
+				
+			    return o;
+			}
+			half4 frag(	v2f IN) : SV_TARGET0
+			{
+				return _OutlineColor;
+			}
+			ENDHLSL
+		}
+    	
+	    Pass
+        {
+	        Name "Character_Cartoon_ShadowCaster"
+            Tags{ "LightMode" = "ShadowCaster" }
+
+            ZWrite On
+            ZTest LEqual
+            Cull[_Cull]
+
+            HLSLPROGRAM
+            #pragma target 3.0
+            
+            #pragma vertex vert
+            #pragma fragment frag
+            
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+			float3 _LightDirection;
+			float4 _ShadowBias;
+
+			struct appdata
+			{
+			    float3 positionOS : POSITION;
+			    half3 normalOS : NORMAL;
+			    float2 uv : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+			    float2 uv : TEXCOORD0;
+			    float4 positionCS : SV_POSITION;
+			};
+
+			float3 ApplyShadowBias(float3 positionWS, float3 normalWS, float3 lightDirection)
+			{
+			    float invNdotL = 1.0 - saturate(dot(lightDirection, normalWS));
+			    float scale = invNdotL * _ShadowBias.y;
+
+			    positionWS = lightDirection * _ShadowBias.xxx + positionWS;
+			    positionWS = normalWS * scale.xxx + positionWS;
+			    return positionWS;
+			}
+
+			float4 GetShadowPositionHClip(appdata input)
+			{
+			    float3 positionWS = TransformObjectToWorld(input.positionOS.xyz);
+			    float3 normalWS = TransformObjectToWorldNormal(input.normalOS);
+			    float4 positionCS = TransformWorldToHClip(ApplyShadowBias(positionWS, normalWS, _LightDirection));
+
+			    #if UNITY_REVERSED_Z
+			    positionCS.z = min(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+			    #else
+			    positionCS.z = max(positionCS.z, positionCS.w * UNITY_NEAR_CLIP_VALUE);
+			    #endif
+
+			    return positionCS;
+			}
+
+			v2f vert(appdata v)
+			{
+			    v2f o;
+			    o.positionCS = GetShadowPositionHClip(v);
+			    o.uv = v.uv;
+
+			    return o;
+			}
+
+			half4 frag(v2f i) : SV_TARGET
+			{
+			    half alpha = 0;
+
+			    return 0;
+			}
+            ENDHLSL
+        }
+    }
+	FallBack "Hidden/Universal Render Pipeline/FallbackError" 
+//    CustomEditor "CustomShaderEditor.CustomShaderGUI" 
+}

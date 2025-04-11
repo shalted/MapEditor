@@ -1,0 +1,65 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitScriptComponentsEditorAndRuntime", "Kamgam.UIToolkitScriptComponentsEditorAndRuntime.csproj", "{a390a8ca-d523-0bdc-898e-b1da36c86e5a}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Assembly-CSharp.csproj", "{0cbadc7e-ce1f-bfe7-5545-ec8cf8133ccd}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitPlaymaker", "Kamgam.UIToolkitPlaymaker.csproj", "{5e456285-5af3-545d-c2d3-ad9265cc57a1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitBlurredBackground", "Kamgam.UIToolkitBlurredBackground.csproj", "{accb2c33-c29a-53b2-1de1-65b4f1b658aa}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitGlow", "Kamgam.UIToolkitGlow.csproj", "{d158d9e6-961d-cb6b-5574-afee5ea037a8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitVisualScripting", "Kamgam.UIToolkitVisualScripting.csproj", "{f8a74593-ace0-4bda-494b-12d24bc617f0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitScriptComponentsEditor", "Kamgam.UIToolkitScriptComponentsEditor.csproj", "{00187351-e971-d898-6ca8-d992df9545e1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitScrollViewPro", "Kamgam.UIToolkitScrollViewPro.csproj", "{e3758248-9285-65a8-2d8a-8af9e9cb5903}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitWorldImage", "Kamgam.UIToolkitWorldImage.csproj", "{330bc457-b23f-5e3e-04ab-3a9595dc10bd}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitVisualScripting.Editor", "Kamgam.UIToolkitVisualScripting.Editor.csproj", "{9368e862-8568-b1c5-cb0d-55427b78fc17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp-Editor", "Assembly-CSharp-Editor.csproj", "{d5442f26-ba10-17fb-0d48-5d5912732e6c}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitParticles", "Kamgam.UIToolkitParticles.csproj", "{978755c2-4cee-f277-bd5b-16ab4cdb2b57}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kamgam.UIToolkitParticles.Editor", "Kamgam.UIToolkitParticles.Editor.csproj", "{54340e50-8220-785a-e0ec-fc6a7c83d3f7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{a390a8ca-d523-0bdc-898e-b1da36c86e5a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{a390a8ca-d523-0bdc-898e-b1da36c86e5a}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0cbadc7e-ce1f-bfe7-5545-ec8cf8133ccd}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0cbadc7e-ce1f-bfe7-5545-ec8cf8133ccd}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5e456285-5af3-545d-c2d3-ad9265cc57a1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5e456285-5af3-545d-c2d3-ad9265cc57a1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{accb2c33-c29a-53b2-1de1-65b4f1b658aa}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{accb2c33-c29a-53b2-1de1-65b4f1b658aa}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{d158d9e6-961d-cb6b-5574-afee5ea037a8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{d158d9e6-961d-cb6b-5574-afee5ea037a8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{f8a74593-ace0-4bda-494b-12d24bc617f0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{f8a74593-ace0-4bda-494b-12d24bc617f0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00187351-e971-d898-6ca8-d992df9545e1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00187351-e971-d898-6ca8-d992df9545e1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{e3758248-9285-65a8-2d8a-8af9e9cb5903}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{e3758248-9285-65a8-2d8a-8af9e9cb5903}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{330bc457-b23f-5e3e-04ab-3a9595dc10bd}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{330bc457-b23f-5e3e-04ab-3a9595dc10bd}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9368e862-8568-b1c5-cb0d-55427b78fc17}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9368e862-8568-b1c5-cb0d-55427b78fc17}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{d5442f26-ba10-17fb-0d48-5d5912732e6c}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{d5442f26-ba10-17fb-0d48-5d5912732e6c}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{978755c2-4cee-f277-bd5b-16ab4cdb2b57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{978755c2-4cee-f277-bd5b-16ab4cdb2b57}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54340e50-8220-785a-e0ec-fc6a7c83d3f7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54340e50-8220-785a-e0ec-fc6a7c83d3f7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
