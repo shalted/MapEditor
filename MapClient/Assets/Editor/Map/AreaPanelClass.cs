@@ -11,6 +11,7 @@ namespace Editor.Map
         
         private Toggle _isShowAreaModel;
         private TextField _areaName;
+        private string selectArea;
         
         public void CreateAreaLine(VisualElement parentElement)
         {
@@ -44,7 +45,6 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                     marginTop = 15,
                     marginLeft = 10,
@@ -64,7 +64,6 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                 }
             };
@@ -82,20 +81,24 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                 }
             };
+            CreateCommonBtn(line, "编辑当前层", OnclickSelectEditor, true);
+            CreateCommonBtn(line, "清除", OnclickClean);
+            CreateCommonBtn(line, "保存", OnclickSave);
+            parentElement.Add(line);
         }
         
         private void OnclickPanelShow(bool isTrue)
         {
-            
+            MapManager.SetCurChunkShowState(isTrue, "AreaTree");
         }
         
         private void OnclickChoose(string chooseStr, bool isChange = true)
         {
-
+            selectArea = chooseStr;
+            MapManager.SetCurArea(chooseStr);
         }
         
         private void OnclickCreate()
@@ -104,6 +107,23 @@ namespace Editor.Map
             {
                 _areaList.Add(_areaName.value);
             }
+        }
+        
+        private void OnclickSelectEditor()
+        {
+            _isShowAreaModel.value = true;
+            MapManager.SetCurChunkShowState(true, "AreaTree");
+            MapManager.SetAreaEditor();
+        }
+        
+        private void OnclickClean()
+        {
+            MapManager.ClearArea(selectArea);
+        }
+        
+        private void OnclickSave()
+        {
+            
         }
     }
 }

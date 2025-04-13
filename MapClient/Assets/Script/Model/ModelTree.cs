@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using Script.Area;
 using Script.Map;
 using UnityEngine;
 
@@ -37,6 +38,11 @@ namespace Script.Model
             var row = (int)Mathf.Floor((MapEnum.MapHeight / (2 * MapEnum.Ppu) + worldPos.y) / (MapEnum.CellSize / (float)MapEnum.Ppu));
             UpdateMapNodeInfo(row, column);
             if (!MapEnum.IsEditorMode || !MapManager.GetCurChunkShowState("ModelTree")) return;
+            if (!_worldMap.IsAreaMap(column, row))
+            {
+                Debug.Log("非地域格子，禁止层级划分");
+                return;
+            }
             ChangeModel(row, column, worldPos);
         }
         

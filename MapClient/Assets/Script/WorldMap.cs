@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Script.Area;
 using Script.Chunk;
 using Script.Map;
 using Script.Model;
@@ -16,8 +17,9 @@ namespace Script
         private static Camera _mapCamera;
         private MapTree _mapTree;
         private ChunkTree _chunkTree;
-        private ModelTree _modelTree;
         private MapMain _mapMain;
+        private ModelTree _modelTree;
+        private AreaTree _areaTree;
         private GameObject _gameObject;
         private Camera _cameraComp;
         
@@ -33,9 +35,10 @@ namespace Script
             var path = Application.dataPath + "/slg_elem_data.xml";
             DataSlgElem.ReadExcelXml(path, ref _excelRowList);
             var mapMain = transform.Find("MapMain");
-            var mapTree = transform.Find("MapTree");
+            var mapTree = mapMain.Find("MapTree");
             var chunkTree = mapMain.Find("ChunkTree");
             var modelTree = mapMain.Find("ModelTree");
+            var areaTree = mapMain.Find("AreaTree");
             _cameraComp = transform.Find("mapCamera").GetComponent<Camera>();
             _cameraComp.orthographicSize = MapEnum.ScreenHeight / (2 * (float)MapEnum.Ppu);
             _mapMain = mapMain.GetComponent<MapMain>();
@@ -46,11 +49,14 @@ namespace Script
             _chunkTree.Init(this);
             _modelTree = modelTree.GetComponent<ModelTree>();
             _modelTree.Init(this);
+            _areaTree = areaTree.GetComponent<AreaTree>();
+            _areaTree.Init(this);
             AddDelegate();
             MapManager.Init(this);
             MapManager.SetCurChunkLayer(mapTree.gameObject, mapTree.name);
             MapManager.SetCurChunkLayer(chunkTree.gameObject, chunkTree.name);
             MapManager.SetCurChunkLayer(modelTree.gameObject, modelTree.name);
+            MapManager.SetCurChunkLayer(areaTree.gameObject, areaTree.name);
         }
         
         private void AddDelegate()
@@ -58,6 +64,7 @@ namespace Script
             _mapMain.OnUpdateMap += _mapTree.UpdateMap;
             _mapMain.OnUpdateMap += _chunkTree.UpdateMap;
             _mapMain.OnUpdateMap += _modelTree.UpdateMap;
+            _mapMain.OnUpdateMap += _areaTree.UpdateMap;
             RefreshMap();
         }
 
@@ -81,6 +88,11 @@ namespace Script
                 return;
             }
             var worldPos = GetClickWorldPosition(eventData);
+            if (MapEnum.isDrawArea)
+            {
+                _areaTree.AddNode(worldPos);
+                return;
+            }
             if (MapEnum.IsDrawChunk)
             {
                 _chunkTree.AddNode(worldPos);
@@ -106,6 +118,11 @@ namespace Script
             if (MapEnum.IsDragDrawMode)
             {
                 var worldPos = GetClickWorldPosition(eventData);
+                if (MapEnum.isDrawArea)
+                {
+                    _areaTree.AddNode(worldPos);
+                    return;
+                }
                 if (worldPos == Vector3.one * 100000)
                 {
                     return;
@@ -154,10 +171,16 @@ namespace Script
             _modelTree.CleanMap(true);
         }
         
+        public void CleanArea()
+        {
+            _areaTree.CleanMap(true);
+        }
+        
         public void CleanMap()
         {
             _chunkTree.CleanMap();
             _modelTree.CleanMap();
+            _areaTree.CleanMap();
         }
         
         public void SaveDataToFile()
@@ -219,6 +242,12 @@ namespace Script
         public void AddChunk(int column, int row)
         {
             _chunkTree.AddChunk(column, row, true);
+        }
+        
+        public bool IsAreaMap(int column, int row)
+        {
+            Debug.Log(column + " " + row);
+            return _areaTree.IsAreaLayer(column, row);
         }
     }
 }

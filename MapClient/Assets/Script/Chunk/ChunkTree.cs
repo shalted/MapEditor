@@ -47,6 +47,11 @@ namespace Script.Chunk
             var row = (int)Mathf.Floor((MapEnum.MapHeight / (2 * MapEnum.Ppu) + worldPos.y) / (MapEnum.CellSize / (float)MapEnum.Ppu));
             UpdateMapNodeInfo(row, column);
             if (!MapEnum.IsEditorMode || !MapManager.GetCurChunkShowState("ChunkTree")) return;
+            if (!_worldMap.IsAreaMap(column, row))
+            {
+                Debug.Log("非地域格子，禁止层级划分");
+                return;
+            }
             ChangeChunk(row, column);
         }
         

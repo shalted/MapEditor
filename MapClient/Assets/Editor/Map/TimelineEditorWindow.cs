@@ -73,10 +73,10 @@ namespace Editor.Map
             CreateTimeLineTimeText(timeLineLongitudinalRoot);
             CreateInspectorPanel();
             CreateMapPanel();
+            CreateAreaPanelClass();
             CreateChunkPanel();
             CreateModelPanel();
             CreateSpecialFeatures();
-            //CreateAreaPanelClass();
             CheckAndSpawnPrefab();
             EditorApplication.update += OnEditorUpdate;
         }
@@ -483,6 +483,12 @@ namespace Editor.Map
             specialLine.CreateLine(_root);
         }
         
+        private void CreateAreaPanelClass()
+        {
+            var areaLine = new AreaPanelClass();
+            areaLine.CreateAreaLine(_root);
+        }
+
         private void CreateInspectorPanel()
         {
             var modelLine = new InspectorPanelClass();

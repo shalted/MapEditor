@@ -51,6 +51,7 @@ namespace Script.Map
         
         public static void SetCurChunkShowState(bool isShow, string name = "", string hideName = "")
         {
+            MapEnum.isDrawArea = false;
             if (string.IsNullOrEmpty(name))
             {
                 if (ObjectMap.TryGetValue(hideName, out var value1))
@@ -104,5 +105,22 @@ namespace Script.Map
         {
             _worldMap.SaveModelMapData();
         }
+        
+        public static void SetAreaEditor()
+        {
+            MapEnum.isDrawArea = true;
+        }
+        
+        public static void SetCurArea(string str)
+        {
+            MapEnum.AreaName = str;
+        }
+        
+        public static void ClearArea(string str)
+        {
+            MapEnum.AreaName = str;
+            _worldMap.CleanModel();
+        }
+        
     }
 }

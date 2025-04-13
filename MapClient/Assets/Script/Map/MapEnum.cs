@@ -22,6 +22,7 @@ namespace Script.Map
         public static string MapName = "Normal";        //默认地图名称
         public static string ChunkMode = "ResourceLayer";    // 地块层级
         public static string ChunkMaterialName = "m_ResourceLayer";    // 地块颜色
+        public static string AreaName = "";    // 地块颜色
         
         public static bool IsLoadAllMap = true;                      // 坐标转换比例
         public static bool IsDeleteMode;       // 是否删除模式
@@ -29,6 +30,8 @@ namespace Script.Map
         public static bool IsShowMeshMode;       // 是否拖拽绘制模式
         public static bool IsEditorMode = true;       // 是否编辑模式
         public static bool IsDrawChunk = true;       // 是否编辑模式
+        public static bool isDrawArea = true;       // 是否编辑模式
+        
         
         public enum ChunkNameEnum
         {

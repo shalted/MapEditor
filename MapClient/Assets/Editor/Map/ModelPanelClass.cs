@@ -27,7 +27,7 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Column,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
+                    backgroundColor = new StyleColor(HexToColor("#5c5c5c")),
                     height = 120, // 设置固定高,
                 }
             };
@@ -50,7 +50,6 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                     marginTop = 15,
                     marginLeft = 10,
@@ -70,7 +69,6 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                 }
             };
@@ -88,7 +86,6 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Row,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 30, // 设置固定高,
                 }
             };

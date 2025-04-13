@@ -26,7 +26,7 @@ namespace Editor.Map
                 {
                     flexDirection = FlexDirection.Column,
                     justifyContent = Justify.FlexStart,
-                    backgroundColor = new StyleColor(HexToColor("#5c5c5c")),
+                    backgroundColor = new StyleColor(HexToColor("#4F4F4F")),
                     height = 120, // 设置固定高,
                 }
             };
